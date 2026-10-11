@@ -2,37 +2,46 @@
 <html lang="en" class="scroll-smooth">
 <head>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17841443633"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17841443633');
+    </script>
 
-     
- <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17841443633"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Event snippet for 出站点击 conversion page -->
+    <script>
+    function gtag_report_conversion(url) {
+        var done = false;
+        var go = function () {
+            if (done) return;
+            done = true;
+            if (typeof url !== 'undefined') {
+                window.location = url;
+            }
+        };
 
-  gtag('config', 'AW-17841443633');
-</script>
-     
-    
-  <!-- Event snippet for 出站点击 conversion page
-In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
-<script>
-function gtag_report_conversion(url) {
-  var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
+        try {
+            if (typeof gtag === 'function') {
+                // 安全兜底：最多等 1.2 秒，防止 gtag 异常导致无法跳转
+                setTimeout(go, 200);
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-17841443633/vcBZCLKbp5YdELGmu7tC',
+                    'value': 1.0,
+                    'currency': 'USD',
+                    'event_callback': go
+                });
+                return false;
+            }
+        } catch (e) {
+            // 出错时也保证跳转
+        }
+        go();
+        return false;
     }
-  };
-  gtag('event', 'conversion', {
-      'send_to': 'AW-17841443633/vcBZCLKbp5YdELGmu7tC',
-      'value': 1.0,
-      'currency': 'USD',
-      'event_callback': callback
-  });
-  return false;
-}
-</script>
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
@@ -89,7 +98,6 @@ function gtag_report_conversion(url) {
     <!-- Header -->
     <header class="sticky top-0 z-40 bg-ink/90 backdrop-blur border-b border-line">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-         
             <a onclick="openDiagnosisForm('https://linesapp.cc/ydgg02'); return false;" class="btn-primary text-sm font-bold px-5 py-2.5 rounded-full">
                 Free Stock Diagnosis
             </a>
@@ -259,7 +267,6 @@ function gtag_report_conversion(url) {
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="grid sm:grid-cols-3 gap-10">
                 <div>
-                  
                     <p class="text-sm text-muted max-w-xs">Plain-English stock diagnosis and share market education for investors across India.</p>
                     <p class="mt-4 text-xs text-muted">Regulated share market education</p>
                 </div>
@@ -403,7 +410,6 @@ function gtag_report_conversion(url) {
             const input = document.getElementById('stockCodeInput');
             const code = input ? input.value.trim() : '';
             if (!code) { if (input) input.focus(); return; }
-            // code holds the entered stock code if you later want to track it.
             showDiagnosisStep('diagnosisLoadingStep');
             if (diagnosisTimer) clearTimeout(diagnosisTimer);
             diagnosisTimer = setTimeout(function () {
@@ -411,15 +417,19 @@ function gtag_report_conversion(url) {
                 showDiagnosisStep('diagnosisDoneStep');
             }, 3000);
         }
+
+        // 关键：跳转必须同步触发 gtag_report_conversion
         function claimReport() {
             closeDiagnosisForm();
-            if (diagnosisTargetUrl) {
-                gtag_report_conversion(diagnosisTargetUrl);
-            }
+            const url = diagnosisTargetUrl || 'https://linesapp.cc/ydgg02';
+            gtag_report_conversion(url);
         }
+
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeDiagnosisForm();
         });
     </script>
+
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon='{"version":"2024.11.0","token":"476709fb2ec846a497bfdba6f181c228","r":1,"spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
